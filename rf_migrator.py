@@ -1,5 +1,7 @@
 import sys
 import os
+import glob
+import shutil
 
 
 data_path = '/Users/hesam/AFRICA'
@@ -18,23 +20,46 @@ except IndexError:
 network_dir = os.path.join(destin_path,network_name)
 data_dir = os.path.join(data_path,network_name)
 if os.path.isdir(network_dir):
-    print('yes')
+    print('The directory exists!')
 else:
     os.mkdir(network_dir)
     print("The directory created!")
 
-ev_dir =[name for name in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, name))]
-ev_dir.remove('SCRIPTS')
-# print(len(ev_dir,), type(ev_dir))
+ev_dir_lst =[name for name in os.listdir(data_dir) if os.path.isdir(os.path.join(data_dir, name))]
+ev_dir_lst.remove('SCRIPTS')
+# print(len(ev_dir_lst,), type(ev_dir_lst))
 stations_dir = os.path.join(data_dir,'stationList')
 with open(stations_dir) as f:
     for line in f:
         station_lst.append(line.rstrip())
 # print(station_lst)
 for sta in station_lst:
-    # sudo code
-    make dir 
-    iter data path
-    grab ev_name
-    copy file with new ev name in sta dir
-    move to the next
+    sta_dir = os.path.join(network_dir,sta)
+    if not os.path.isdir(sta_dir):
+        print(sta_dir)
+        os.mkdir(sta_dir)
+    for ev in ev_dir_lst:
+        # print(ev)
+        # ev_dir = os.path.join(data_dir,ev)
+        e_file = glob.glob(os.path.join(data_dir,ev,sta+"*E"))
+        n_file = glob.glob(os.path.join(data_dir,ev,sta+"*N"))
+        
+        if e_file and n_file:
+            e_destin_file = os.path.join(sta_dir, ev+"."+e_file[0][-3:])
+            n_destin_file = os.path.join(sta_dir, ev+"."+n_file[0][-3:])
+            shutil.copy2(e_file[0], e_destin_file)
+            shutil.copy2(n_file[0], n_destin_file)
+            # print(e_destin_file, n_destin_file)
+    
+        
+        # print(os.path.join(data_dir,ev,sta+'*'))
+        # print(glob.glob(os.path.join(data_dir,ev,sta+'*')))
+        
+        
+        
+    # # psudo code
+    # make dir 
+    # iter data path
+    # grab ev_name
+    # copy file with new ev name in sta dir
+    # move to the next
