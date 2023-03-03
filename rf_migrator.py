@@ -3,6 +3,11 @@ import os
 import glob
 import shutil
 
+##
+def make_dir(dir_path):
+    if not os.path.isdir(dir_path):
+        os.mkdir(dir_path)
+
 
 data_path = '/Users/hesam/AFRICA'
 destin_path = '/Users/hesam/RF/NETWORKS'
@@ -45,8 +50,9 @@ for sta in station_lst:
         n_file = glob.glob(os.path.join(data_dir,ev,sta+"*N"))
         
         if e_file and n_file:
-            e_destin_file = os.path.join(sta_dir, ev+"."+e_file[0][-3:])
-            n_destin_file = os.path.join(sta_dir, ev+"."+n_file[0][-3:])
+            e_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+e_file[0][-3:])
+            n_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+n_file[0][-3:])
+            make_dir(os.path.dirname(e_destin_file))
             shutil.copy2(e_file[0], e_destin_file)
             shutil.copy2(n_file[0], n_destin_file)
             # print(e_destin_file, n_destin_file)
