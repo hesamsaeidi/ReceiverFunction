@@ -48,13 +48,16 @@ for sta in station_lst:
         # ev_dir = os.path.join(data_dir,ev)
         e_file = glob.glob(os.path.join(data_dir,ev,sta+"*E"))
         n_file = glob.glob(os.path.join(data_dir,ev,sta+"*N"))
+        z_file = glob.glob(os.path.join(data_dir,ev,sta+"*Z"))
         
-        if e_file and n_file:
+        if e_file and n_file and z_file:
             e_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+e_file[0][-3:])
             n_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+n_file[0][-3:])
+            z_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+z_file[0][-3:])
             make_dir(os.path.dirname(e_destin_file))
             shutil.copy2(e_file[0], e_destin_file)
             shutil.copy2(n_file[0], n_destin_file)
+            shutil.copy2(z_file[0], z_destin_file)
             # print(e_destin_file, n_destin_file)
     
         
