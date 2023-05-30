@@ -9,7 +9,9 @@ def make_dir(dir_path):
         os.mkdir(dir_path)
 
 
-data_path = '/Users/hesam/AFRICA'
+data_path = '/Users/hesam/AFRICA/S_2023'
+# data_path = '/Users/hesam/RF/From_Sam'
+# data_path = '/Users/hesam/AFRICA/Ryan/AFRICA_S'
 destin_path = '/Users/hesam/RF/NETWORKS'
 station_lst = []
 # network name must be inserted as second arg
@@ -44,31 +46,16 @@ for sta in station_lst:
         print(sta_dir)
         os.mkdir(sta_dir)
     for ev in ev_dir_lst:
-        # print(ev)
-        # ev_dir = os.path.join(data_dir,ev)
         e_file = glob.glob(os.path.join(data_dir,ev,sta+"*E"))
         n_file = glob.glob(os.path.join(data_dir,ev,sta+"*N"))
-        z_file = glob.glob(os.path.join(data_dir,ev,sta+"*Z"))
+        # z_file = glob.glob(os.path.join(data_dir,ev,sta+"*Z"))
         
-        if e_file and n_file and z_file:
+        if e_file and n_file: # and z_file:
             e_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+e_file[0][-3:])
             n_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+n_file[0][-3:])
-            z_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+z_file[0][-3:])
+            # z_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+z_file[0][-3:])
             make_dir(os.path.dirname(e_destin_file))
             shutil.copy2(e_file[0], e_destin_file)
             shutil.copy2(n_file[0], n_destin_file)
-            shutil.copy2(z_file[0], z_destin_file)
-            # print(e_destin_file, n_destin_file)
-    
-        
-        # print(os.path.join(data_dir,ev,sta+'*'))
-        # print(glob.glob(os.path.join(data_dir,ev,sta+'*')))
-        
-        
-        
-    # # psudo code
-    # make dir 
-    # iter data path
-    # grab ev_name
-    # copy file with new ev name in sta dir
-    # move to the next
+            # shutil.copy2(z_file[0], z_destin_file)
+           

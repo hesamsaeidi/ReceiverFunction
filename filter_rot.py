@@ -52,7 +52,8 @@ for sta in station_list:
             # print(ev_stream)
             if len(ev_stream) != 3:
                 warnings.warn("insufficient number of components!!")
-                
+                # print(stream_name)
+                continue
             back_azimuth = ev_stream[0].stats.sac['baz']
             try:
                 ev_stream.rotate(method='NE->RT',back_azimuth=back_azimuth)

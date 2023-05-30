@@ -2,12 +2,9 @@ import sys
 import os
 import subprocess
 import shutil
+from nec_func import *
 
 iterd = '/Users/hesam/RF/PROGRAMS.330/bin/saciterd'
-
-def make_dir(dir_path):
-    if not os.path.isdir(dir_path):
-        os.mkdir(dir_path)
 
 
 try:
@@ -37,9 +34,17 @@ for sta in station_list:
             r_comp_name = os.path.join(data_dir,stream_name + "Rf")
             z_comp_name = os.path.join(data_dir,stream_name + "Zf")
             rf_output = subprocess.run([iterd , '-FN',r_comp_name , '-FD',z_comp_name, 
-                                        "-E",'0.001', "-ALP", "1","-N","200", "-D","0", 
-                                        "-POS","false"] ,capture_output=True, shell=True, text=True)
-            print(rf_output)
-            print(rf_output.stderr)
+                                        "-E",'0.001', "-ALP", "1","-N","200", "-D","0", "-POS","false"],
+                                       capture_output=True)
+                                    #    stdout=subprocess.DEVNULL,
+                                    #    stderr=subprocess.DEVNULL)
+            # print(rf_output)
+            # print(rf_output.stderr)
+            print(rf_output.stdout)
+            # shutil.copy2('decon.out', )
+            # shutil.copy2('denominator', )
+            # shutil.copy2('numerator', )
+            # shutil.copy2('observed', )
+            # shutil.copy2('predicted', )
         break
     break
