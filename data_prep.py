@@ -10,7 +10,7 @@ try:
 except IndexError:
     print("you need to insert network code!")
     sys.exit(1)
-trim_name = int(sys.argv[2])  # set True if you want to trim the name to seconds
+trim_name = int(sys.argv[2])  # set 1 if you want to trim the name to seconds
 
 base_path = '/Users/hesam/RF/NETWORKS/{network_code}'
 station_list = os.listdir(base_path.format(network_code=netwrok_code))

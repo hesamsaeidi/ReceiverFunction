@@ -7,4 +7,8 @@ The order of execution is:
 1. rf_migrator.py for tomo data and dd_mig.py for recently downloaded data
     1.1 removePZ.py {NOTICE: for dd_mig.py data only}
 2. data_prep.py
+    the code should be executed as 
+    /.>python data_prep.py {network_name} 1/0
+    1 will trim the name of the record to seconds
+    0 will leave the name as is
 
