@@ -40,8 +40,15 @@ for sta in station_list:
                                     #    stderr=subprocess.DEVNULL)
             # print(rf_output)
             # print(rf_output.stderr)
-            print(rf_output.stdout)
-            # shutil.copy2('decon.out', )
+            indx = rf_output.stdout.decode("utf-8").find('The final deconvolution reproduces')
+            recovery_percent = float(rf_output.stdout.decode("utf-8")[indx+34:indx+41].strip())
+            log_file = os.path.join(rf_dir,'decon_recovery.log')
+            log_to_file(log_file,stream_name[:-3]+rf_output.stdout.decode("utf-8")[indx+34:indx+42])
+            if recovery_percent > 79:
+                print('yes')
+            else:
+                print('no files will be created!')
+            shutil.copy2('decon.out', os.path.join(rf_dir,stream_name+'decon.out'))
             # shutil.copy2('denominator', )
             # shutil.copy2('numerator', )
             # shutil.copy2('observed', )
