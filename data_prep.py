@@ -40,7 +40,7 @@ for sta in station_list:
 
             # Put the time and difference together as datetime object
             evtime = year + refr + origin_diff
-            str_name = "Event_"+evtime.strftime("%Y.%m.%d.%H.%M.%S").rstrip("0")+"."+chnl
+            str_name = "Event_"+evtime.strftime("%Y.%m.%d.%H.%M.%S")+"."+chnl
             os.remove(os.path.join(sta_dir,comp))
             st_info.write(os.path.join(sta_dir,str_name), format="SAC")
             time.sleep(0.05)

@@ -57,29 +57,29 @@ for sta in station_list:
             back_azimuth = ev_stream[0].stats.sac['baz']
             try:
                 ev_stream.rotate(method='NE->RT',back_azimuth=back_azimuth)
+                ev_stream.detrend(type="demean")
+                ev_stream.detrend(type="linear")
+                ev_stream.taper(0.05)
+                ev_stream.filter("highpass", freq=0.05)
+                ev_stream.filter("lowpass", freq=8)
+                ev_stream.interpolate(sampling_rate=20)
+            
+                # print(ev_stream)
+                filtered_data_path = sta_dir.replace("Seismograms", "Waveforms")
+                make_dir(filtered_data_path)
+                filtered_data = os.path.join(filtered_data_path,stream_name)
+                ev_stream[0].write(filtered_data+"Tf", format="SAC")
+                time.sleep(0.1)
+                ev_stream[1].write(filtered_data+"Rf", format="SAC")
+                time.sleep(0.1)
+                ev_stream[2].write(filtered_data+"Zf", format="SAC")
+                time.sleep(0.1)
+                
             except ValueError as e:
                 print(e)
                 # call_trim(ev_stream)
                 # ev_stream.rotate(method='NE->RT',back_azimuth=back_azimuth)
                 continue
-              
-            
-            ev_stream.detrend(type="demean")
-            ev_stream.detrend(type="linear")
-            ev_stream.taper(0.05)
-            ev_stream.filter("highpass", freq=0.05)
-            ev_stream.filter("lowpass", freq=8)
-            ev_stream.interpolate(sampling_rate=20)
-            # print(ev_stream)
-            filtered_data_path = sta_dir.replace("Seismograms", "Waveforms")
-            make_dir(filtered_data_path)
-            filtered_data = os.path.join(filtered_data_path,stream_name)
-            ev_stream[0].write(filtered_data+"Tf", format="SAC")
-            time.sleep(0.1)
-            ev_stream[1].write(filtered_data+"Rf", format="SAC")
-            time.sleep(0.1)
-            ev_stream[2].write(filtered_data+"Zf", format="SAC")
-            time.sleep(0.1)
             
         
 
