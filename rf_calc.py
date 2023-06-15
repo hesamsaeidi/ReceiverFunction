@@ -21,6 +21,8 @@ for sta in station_list:
     rf_dir = data_dir.replace("Waveforms", "rftn")
     make_dir(rf_dir)
     os.chdir(rf_dir)
+    low_recovery_rf_dir = os.path.join(rf_dir,'Low_Recovery')
+    make_dir(low_recovery_rf_dir)
     if os.path.isdir(data_dir):
         ev_list = os.listdir(data_dir)
     else:
@@ -34,10 +36,19 @@ for sta in station_list:
             r_comp_name = os.path.join(data_dir,stream_name + "Rf")
             z_comp_name = os.path.join(data_dir,stream_name + "Zf")
             rf_output = subprocess.run([iterd , '-FN',r_comp_name , '-FD',z_comp_name, 
-                                        "-E",'0.001', "-ALP", "1","-N","200", "-D","0", "-POS","false"],
+                                        # -FN file_num (default none) numerator SAC binary
+                                        # -FD file_den (default none) denominator SAC binary
+                                        # -E error (0.001) convergence criteria
+                                        # -ALP alpha (default 1.0) Gaussian Filter Width  (NOTE: Emry et al. used both 0.5 and 1)
+                                        #     H(f) = exp( - (pi freq/alpha)**2) 
+                                        #     Filter corner ~ alpha/pi 
+                                        # -N niter (default 100, 1000 max) Number iterations/bumps
+                                        # -D delay (5 sec) Begin output delay sec before t=0
+                                        # -POS (default false) Only permit positive amplitudes
+                                        # -2  (default false) use double length FFT to  avoid FFT wrap around in convolution
+                                        # -RAYP rayp (default -12345.0) ray parameter in  sec/km used by rftn96/joint96
+                                        "-E",'0.0001', "-ALP", "1","-N","500", "-D","0", "-POS","false"],
                                        capture_output=True)
-                                    #    stdout=subprocess.DEVNULL,
-                                    #    stderr=subprocess.DEVNULL)
             # print(rf_output)
             # print(rf_output.stderr)
             indx = rf_output.stdout.decode("utf-8").find('The final deconvolution reproduces')
@@ -45,13 +56,16 @@ for sta in station_list:
             log_file = os.path.join(rf_dir,'decon_recovery.log')
             log_to_file(log_file,stream_name[:-3]+rf_output.stdout.decode("utf-8")[indx+34:indx+42])
             if recovery_percent > 79:
-                print('yes')
+                shutil.copy2('decon.out', os.path.join(rf_dir,stream_name+'decon.out'))
             else:
                 print('no files will be created!')
-            shutil.copy2('decon.out', os.path.join(rf_dir,stream_name+'decon.out'))
-            # shutil.copy2('denominator', )
-            # shutil.copy2('numerator', )
-            # shutil.copy2('observed', )
-            # shutil.copy2('predicted', )
+                shutil.copy2('decon.out', os.path.join(low_recovery_rf_dir,stream_name+'decon.out'))
+            os.remove('denominator')
+            os.remove('numerator')
+            os.remove('observed')
+            os.remove('predicted')
+            
         break
-    break
+    break    
+        
+    
