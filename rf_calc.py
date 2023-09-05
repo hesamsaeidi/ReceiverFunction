@@ -65,7 +65,6 @@ for sta in station_list:
             os.remove('observed')
             os.remove('predicted')
             
-        break
-    break    
+ 
         
     

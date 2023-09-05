@@ -56,13 +56,15 @@ for sta in station_list:
                 continue
             back_azimuth = ev_stream[0].stats.sac['baz']
             try:
-                ev_stream.rotate(method='NE->RT',back_azimuth=back_azimuth)
+                
                 ev_stream.detrend(type="demean")
                 ev_stream.detrend(type="linear")
                 ev_stream.taper(0.05)
                 ev_stream.filter("highpass", freq=0.05)
                 ev_stream.filter("lowpass", freq=8)
                 ev_stream.interpolate(sampling_rate=20)
+                ev_stream.rotate(method='NE->RT',back_azimuth=back_azimuth)
+
             
                 # print(ev_stream)
                 filtered_data_path = sta_dir.replace("Seismograms", "Waveforms")
