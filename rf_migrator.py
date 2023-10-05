@@ -2,14 +2,9 @@ import sys
 import os
 import glob
 import shutil
+from nec_func import *
 
-##
-def make_dir(dir_path):
-    if not os.path.isdir(dir_path):
-        os.mkdir(dir_path)
-
-
-data_path = '/Users/hesam/AFRICA/S_2023'
+data_path = '/Users/hesam/AFRICA/'
 # data_path = '/Users/hesam/RF/From_Sam'
 # data_path = '/Users/hesam/AFRICA/Ryan/AFRICA_S'
 destin_path = '/Users/hesam/RF/NETWORKS'
@@ -21,8 +16,6 @@ except IndexError:
     print("you need to insert network name!")
     sys.exit(1)
     
-# test
-# print(os.listdir(os.path.join(data_path, netwrok_name)))
 
 network_dir = os.path.join(destin_path,network_name)
 data_dir = os.path.join(data_path,network_name)
@@ -48,14 +41,14 @@ for sta in station_lst:
     for ev in ev_dir_lst:
         e_file = glob.glob(os.path.join(data_dir,ev,sta+"*E"))
         n_file = glob.glob(os.path.join(data_dir,ev,sta+"*N"))
-        # z_file = glob.glob(os.path.join(data_dir,ev,sta+"*Z"))
+        z_file = glob.glob(os.path.join(data_dir,ev,sta+"*Z"))
         
-        if e_file and n_file: # and z_file:
+        if e_file and n_file and z_file:
             e_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+e_file[0][-3:])
             n_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+n_file[0][-3:])
-            # z_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+z_file[0][-3:])
+            z_destin_file = os.path.join(sta_dir, "Seismograms", ev+"."+z_file[0][-3:])
             make_dir(os.path.dirname(e_destin_file))
             shutil.copy2(e_file[0], e_destin_file)
             shutil.copy2(n_file[0], n_destin_file)
-            # shutil.copy2(z_file[0], z_destin_file)
+            shutil.copy2(z_file[0], z_destin_file)
            

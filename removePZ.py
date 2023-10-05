@@ -6,14 +6,14 @@ import time
 fdsn_client = Client('IRIS')
 
 
-network_name = "IU"
+network_name ="YH"
 dir_path = os.path.join('/Users/hesam/RF/NETWORKS',network_name)
 
 pre_filt = (0.005, 0.006, 30.0, 35.0)
 # eList = os.listdir(dir_path)
-with open('IU_eventList','r') as eL:
+with open('YH_eventList','r') as eL:
     eList = eL.readlines()
-with open('IU_eventList','r') as eLb:
+with open('YH_eventList','r') as eLb:
     eListBackup = eLb.readlines() 
 for comp in eList:
     comp_addr = os.path.join(dir_path, comp.strip())
@@ -38,7 +38,7 @@ for comp in eList:
         print(e)   
         print('>>>new file will be created!!!')
     finally:
-        with open('IU_eventList', 'w') as eLupd:
+        with open('YH_eventList', 'w') as eLupd:
             for item in eListBackup:
                 eLupd.write('{}'.format(item)) 
     

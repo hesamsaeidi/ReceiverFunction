@@ -20,10 +20,10 @@ station_list = os.listdir(base_path.format(network_code=netwrok_code))
 for sta in station_list:
     data_dir = os.path.join(base_path.format(network_code=netwrok_code),sta,"Waveforms")
     rf_dir = data_dir.replace("Waveforms", "rftn")
-    make_dir(rf_dir)
+    # make_dir(rf_dir)
     os.chdir(rf_dir)
-    low_recovery_rf_dir = os.path.join(rf_dir,'Low_Recovery')
-    make_dir(low_recovery_rf_dir)
+    # low_recovery_rf_dir = os.path.join(rf_dir,'Low_Recovery')
+    # make_dir(low_recovery_rf_dir)
     if os.path.isdir(data_dir):
         ev_list = os.listdir(data_dir)
     else:
@@ -58,19 +58,19 @@ for sta in station_list:
                 log_to_file(meta_log_file,stream_name[:-3])
                 # 
                 continue
-            else:
-                recovery_percent = float(rf_output.stdout.decode("utf-8")[indx+34:indx+41].strip())
-                log_file = os.path.join(rf_dir,'decon_recovery.log')
-                log_to_file(log_file,stream_name[:-3]+rf_output.stdout.decode("utf-8")[indx+34:indx+42])
-                if recovery_percent > 79:
-                    shutil.copy2('decon.out', os.path.join(rf_dir,stream_name+'decon.out'))
-                else:
-                    print('files will be copied to low recovery directory!')
-                    shutil.copy2('decon.out', os.path.join(low_recovery_rf_dir,stream_name+'_decon.out'))
-                os.remove('denominator')
-                os.remove('numerator')
-                os.remove('observed')
-                os.remove('predicted')
+            # else:
+            #     recovery_percent = float(rf_output.stdout.decode("utf-8")[indx+34:indx+41].strip())
+            #     log_file = os.path.join(rf_dir,'decon_recovery.log')
+            #     log_to_file(log_file,stream_name[:-3]+rf_output.stdout.decode("utf-8")[indx+34:indx+42])
+            #     if recovery_percent > 79:
+            #         shutil.copy2('decon.out', os.path.join(rf_dir,stream_name+'decon.out'))
+            #     else:
+            #         print('files will be copied to low recovery directory!')
+            #         shutil.copy2('decon.out', os.path.join(low_recovery_rf_dir,stream_name+'_decon.out'))
+            #     os.remove('denominator')
+            #     os.remove('numerator')
+            #     os.remove('observed')
+            #     os.remove('predicted')
             
  
         

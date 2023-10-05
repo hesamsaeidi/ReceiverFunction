@@ -27,3 +27,20 @@ def relative_trim(stream, arrivals, a, b):
     p_arrival = stream[0].stats.starttime + stream[0].stats.sac['o'] + arrivals[0].time
     stream.trim(p_arrival+a, p_arrival+b)
     return stream
+
+
+def call_trim(streams):
+    e_npts = ev_stream[0].stats.npts
+    n_npts = ev_stream[1].stats.npts
+    if e_npts < n_npts:
+        print("trim n comp")
+        t1 = ev_stream[0].stats.starttime
+        t2 = ev_stream[0].stats.endtime
+        ev_stream[1].trim(t1, t2)
+    elif e_npts > n_npts:
+        print("trim e comp")
+        t1 = ev_stream[1].stats.starttime
+        t2 = ev_stream[1].stats.endtime
+        ev_stream[0].trim(t1, t2)
+    else:
+        warnings.warn("trimming doesn't fix your problem")

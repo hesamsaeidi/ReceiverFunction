@@ -5,27 +5,7 @@ import os
 import sys
 import warnings
 import time
-
-
-def make_dir(dir_path):
-    if not os.path.isdir(dir_path):
-        os.mkdir(dir_path)
-
-def call_trim(streams):
-    e_npts = ev_stream[0].stats.npts
-    n_npts = ev_stream[1].stats.npts
-    if e_npts < n_npts:
-        print("trim n comp")
-        t1 = ev_stream[0].stats.starttime
-        t2 = ev_stream[0].stats.endtime
-        ev_stream[1].trim(t1, t2)
-    elif e_npts > n_npts:
-        print("trim e comp")
-        t1 = ev_stream[1].stats.starttime
-        t2 = ev_stream[1].stats.endtime
-        ev_stream[0].trim(t1, t2)
-    else:
-        warnings.warn("trimming doesn't fix your problem")
+from nec_func import *
 
 try:
     netwrok_code = str(sys.argv[1])
@@ -50,13 +30,14 @@ for sta in station_list:
             unique_streams.add(stream_name)
             ev_stream = obspy.read(os.path.join(sta_dir,stream_name+"*"))
             # print(ev_stream)
-            if len(ev_stream) != 3:
+            if len(ev_stream) != 3: #
                 warnings.warn("insufficient number of components!!")
                 # print(stream_name)
                 continue
             back_azimuth = ev_stream[0].stats.sac['baz']
             try:
-                
+                arrivals = call_taup(ev_stream, "AK135", ["P"]) 
+                ev_stream = relative_trim(ev_stream, arrivals, -10, 120) 
                 ev_stream.detrend(type="demean")
                 ev_stream.detrend(type="linear")
                 ev_stream.taper(0.05)
@@ -83,8 +64,9 @@ for sta in station_list:
                 # ev_stream.rotate(method='NE->RT',back_azimuth=back_azimuth)
                 continue
             
+            except IndexError as e:
+                print(e)
+                # print(ev_stream[0].stats)
+                continue
+            
         
-
-
-# 
-
