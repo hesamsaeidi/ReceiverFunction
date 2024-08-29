@@ -38,7 +38,7 @@ for trace in list_dir:
         year = datetime(int(st_info[0].stats.sac['nzyear']),1,1,0,0,0)
 
         # Put the time and difference together as datetime object
-        evtime = year + refr + origin_diff
+        evtime = year + refr + origin_diff -1 # minus one to correct the year convertion
         event_name = "Event_"+evtime.strftime("%Y.%m.%d.%H.%M.%S.%f").rstrip("0")+"."+chnl
         trace_destin = os.path.join(destin_path, event_name)
         trace_source = os.path.join(base_dir, trace)

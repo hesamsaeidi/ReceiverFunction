@@ -15,7 +15,7 @@ except IndexError:
 
 base_path = '/Users/hesam/RF/NETWORKS/{network_code}'
 # filtered_data_path = 
-station_list = os.listdir(base_path.format(network_code=netwrok_code))
+# station_list = os.listdir(base_path.format(network_code=netwrok_code))
 for sta in station_list:
     sta_dir = os.path.join(base_path.format(network_code=netwrok_code),sta,"Seismograms")
     if os.path.isdir(sta_dir):

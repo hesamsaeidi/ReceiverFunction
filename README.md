@@ -19,4 +19,7 @@ If the data is recently downloaded through pyweed:
 4. rf_calc.py
    The main calculation using `saciterd` written by Ligorrıa and Ammon (1999).
    The rest is housekeeping to keep the files based on the percentage recovery. 
+5. rf_plot.py   
+   This file plots the RFs and saves them in the folder named `RFs` in the same directory as the data.
+
 

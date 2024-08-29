@@ -8,18 +8,22 @@ iterd = '/Users/hesam/RF/PROGRAMS.330/bin/saciterd'
 
 
 try:
-    netwrok_code = str(sys.argv[1])
+    network_code = str(sys.argv[1])
 except IndexError:
     print("you need to insert network code!")
     sys.exit(1)
 
 
-base_path = '/Users/hesam/RF/NETWORKS/{network_code}'
-meta_log_file = os.path.join(base_path,'meta.log')
-station_list = os.listdir(base_path.format(network_code=netwrok_code))
+base_path = f'/Users/hesam/RF/NETWORKS/{network_code}'
+meta_log_file = os.path.join('/Users/hesam/RF/NETWORKS','meta.log')
+# station_list = ["HOED", "DULL", "LESE", "MARA", "MPHEP",
+                # "MTLB", "NYAT", "NYLS", "SHUDU", "VERL", "VOET", "WALT"]
+
+station_list = os.listdir(base_path.format(network_code=network_code))
 for sta in station_list:
-    data_dir = os.path.join(base_path.format(network_code=netwrok_code),sta,"Waveforms")
-    rf_dir = data_dir.replace("Waveforms", "rftn")
+    data_dir = os.path.join(base_path.format(network_code=network_code),sta,"Waveforms")
+    rf_dir = data_dir.replace("Waveforms", "rftn_alp1")
+    # rf_dir = data_dir.replace("Waveforms", "rftn_alp0.5")
     make_dir(rf_dir)
     os.chdir(rf_dir)
     low_recovery_rf_dir = os.path.join(rf_dir,'Low_Recovery')
@@ -48,14 +52,15 @@ for sta in station_list:
                                         # -POS (default false) Only permit positive amplitudes
                                         # -2  (default false) use double length FFT to  avoid FFT wrap around in convolution
                                         # -RAYP rayp (default -12345.0) ray parameter in  sec/km used by rftn96/joint96
-                                        "-E",'0.0001', "-ALP", "1","-N","500", "-D","0", "-POS","false"],
+                                        "-E",'0.0001', "-ALP", "1.0","-N","500", "-D","0"],
                                        capture_output=True)
             # print(rf_output)
             # print(rf_output.stderr)
             indx = rf_output.stdout.decode("utf-8").find('The final deconvolution reproduces')
             if indx==-1:
                 print('no files will be created!')
-                log_to_file(meta_log_file,stream_name[:-3])
+                log_text = f'{network_code}' + ' ' + f'{sta}' + ' ' + f'{stream_name[:-3]}'
+                log_to_file(meta_log_file,log_text)
                 # 
                 continue
             else:
@@ -63,7 +68,7 @@ for sta in station_list:
                 log_file = os.path.join(rf_dir,'decon_recovery.log')
                 log_to_file(log_file,stream_name[:-3]+rf_output.stdout.decode("utf-8")[indx+34:indx+42])
                 if recovery_percent > 79:
-                    shutil.copy2('decon.out', os.path.join(rf_dir,stream_name+'decon.out'))
+                    shutil.copy2('decon.out', os.path.join(rf_dir,stream_name+'_decon.out'))
                 else:
                     print('files will be copied to low recovery directory!')
                     shutil.copy2('decon.out', os.path.join(low_recovery_rf_dir,stream_name+'_decon.out'))
@@ -71,6 +76,7 @@ for sta in station_list:
                 os.remove('numerator')
                 os.remove('observed')
                 os.remove('predicted')
+                os.remove('decon.out')
             
  
         
